@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".work_activity">
+
+
+    <ImageView
+        android:id="@+id/heartImage"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/h2"
+        />
+
+    <TextView
+        android:id="@+id/beatRate_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/heartImage"
+        android:layout_centerHorizontal="true"
+        android:text="80 BPM"
+        android:textSize="50sp"
+        android:layout_marginTop="20sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+
+        />
+
+    <TextView
+        android:id="@+id/heartRateCon_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/beatRate_tv"
+        android:layout_marginTop="30dp"
+        android:textColor="#19FF00"
+        android:text="Healthy"
+        />
+
+</RelativeLayout>
