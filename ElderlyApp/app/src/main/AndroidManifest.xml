@@ -13,7 +13,8 @@
         android:roundIcon="@drawable/el1"
         android:supportsRtl="true"
         android:theme="@style/Theme.ElderlyApp">
-        <activity android:name=".work_activity"></activity>
+        <activity android:name=".FaultdetectedActivity"></activity>
+        <activity android:name=".work_activity" />
         <activity android:name=".IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
