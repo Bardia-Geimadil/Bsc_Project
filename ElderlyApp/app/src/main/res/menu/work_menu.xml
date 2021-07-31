@@ -4,7 +4,11 @@
 
     <item
         android:title="Connect"
-        app:showAsAction="always"
+
+        />
+    <item
+            android:title="Setting"
+
         />
 
 

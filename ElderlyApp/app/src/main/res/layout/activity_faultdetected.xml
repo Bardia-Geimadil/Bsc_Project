@@ -1,9 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+
     tools:context=".FaultdetectedActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/war_img"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/w1"
+        />
+    <TextView
+        android:id="@+id/haz_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hazard Detected\nAre you OK?!"
+        android:layout_below="@+id/war_img"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:textColor="#FF0000"
+        android:layout_marginTop="20dp"
+        />
+
+    <Button
+        android:id="@+id/fine_btn"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:textColor="#093504"
+        android:text="Yeah! I`m Ok"
+        android:backgroundTint="@color/purple_500"
+        android:layout_below="@+id/haz_tv"
+        android:textSize="25sp"
+        android:textAllCaps="false"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        />
+
+    <Button
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/call_btn"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fine_btn"
+        android:textColor="#000000"
+       android:backgroundTint="#FF0000"
+        android:text="No, call someone"
+        android:textSize="25sp"
+        android:textAllCaps="false"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        />
+
+</RelativeLayout>

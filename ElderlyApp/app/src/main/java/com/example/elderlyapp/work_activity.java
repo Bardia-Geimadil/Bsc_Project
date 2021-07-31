@@ -4,13 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -18,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,8 +36,13 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
 
     ImageView heartImage;
     TextView beatRate_tv , heartRateCon_tv;
+    Button fault_btn;
 
     public final static int REQ_BT_ENABLE = 1212 ;
+    public final static int PHONE_CALL_PER = 1313 ;
+
+
+
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     BluetoothDevice hc05;
@@ -76,7 +86,41 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
 
 
 
+         fault_btn = findViewById(R.id.fault_btn);
+         fault_btn.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 startActivity(new Intent(work_activity.this , FaultdetectedActivity.class));
+             }
+         });
 
+
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                    != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CALL_PHONE}, PHONE_CALL_PER);
+            }
+        }
+
+
+
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == PHONE_CALL_PER){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(work_activity.this , "Phone Permission granted" , Toast.LENGTH_LONG).show();
+            } else {
+               // Toast.makeText(this, "Permission denied, closing application", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 
@@ -104,7 +148,7 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
                 inputStream = btSocket.getInputStream();
                 inputStream.skip(inputStream.available());
                 // Toast.makeText(this , "Receiving Data ....." , Toast.LENGTH_LONG).show();
-                for (int i = 0; i < 12; i++) {
+                for (int i = 0; i < 3; i++) {
 
                     byte b = (byte) inputStream.read();
                     System.out.println((char) b);
@@ -184,7 +228,7 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
                     inputStream = btSocket.getInputStream();
                     inputStream.skip(inputStream.available());
                     // Toast.makeText(this , "Receiving Data ....." , Toast.LENGTH_LONG).show();
-                    for (int i = 0; i < 12; i++) {
+                    for (int i = 0; i < 3; i++) {
 
                         byte b = (byte) inputStream.read();
                         System.out.println((char) b);
@@ -206,7 +250,7 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
 
                 time_to_show++;
 
-                if(time_to_show == 60)
+                if(time_to_show == 10)
                 {
                     time_to_show = 0;
                     publishProgress(sb.toString());
@@ -222,7 +266,9 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
         @Override
         protected void onProgressUpdate(String... values) {
 
-                 beatRate_tv.setText(values[0]);
+            System.out.println("We are hereeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+
+                 beatRate_tv.setText(values[0] + " BPM");
 
 
         }
@@ -269,16 +315,11 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
 
             new connectionAsyncTask().executeOnExecutor(connectionAsyncTask.THREAD_POOL_EXECUTOR);
 
-//           Thread thread = new Thread(new Runnable() {
-//               @Override
-//               public void run() {
-//
-//                   connectBluetooth();
-//               }
-//           });
-//           Toast.makeText(work_activity.this , "Connecting ... " , Toast.LENGTH_SHORT).show();
-//           thread.start();
+        }
 
+        if(item.getTitle().equals("Setting"))
+        {
+            startActivity(new Intent(work_activity.this , PreferanceScreen.class));
         }
 
         return super.onOptionsItemSelected(item);

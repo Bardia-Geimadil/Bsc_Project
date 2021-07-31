@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+<PreferenceCategory
+    android:title="Call Settings"
+    >
+    <EditTextPreference
+        android:title="Number"
+        android:key="numberKey"
+        android:summary="Enter the number for emergency calls"
+        />
+
+    <EditTextPreference
+        android:title="Delay"
+        android:key="delayKey"
+        android:summary="Set the time of automatic calling delay (in seconds)"
+        />
+
+</PreferenceCategory>
+</PreferenceScreen>
