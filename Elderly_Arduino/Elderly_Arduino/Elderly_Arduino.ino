@@ -4,6 +4,12 @@
 #define USE_ARDUINO_INTERRUPTS true    // Set-up low-level interrupts for most acurate BPM math.
 #include <PulseSensorPlayground.h>     // Includes the PulseSensorPlayground Library.   
 
+#include <Wire.h>
+#include <Adafruit_Sensor.h> 
+#include <Adafruit_ADXL345_U.h>
+
+Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified();
+
 //  Variables
 const int PulseWire = 0;       // PulseSensor PURPLE WIRE connected to ANALOG PIN 0
 const int LED13 = 13;          // The on-board Arduino LED, close to PIN 13.
@@ -17,18 +23,33 @@ PulseSensorPlayground pulseSensor;  // Creates an instance of the PulseSensorPla
 
 SoftwareSerial MyBlue(2, 3); // RX | TX 
 byte flag = 0; 
-int LED = 8; 
+
+int buzzer = 8;
+
 
 void setup() 
 {   
 
+  pinMode(buzzer , OUTPUT);
+    
   Serial.begin(9600); 
   MyBlue.begin(9600); 
-  pinMode(LED, OUTPUT); 
+  
+  
   Serial.println("Ready to connect\nDefualt password is 1234 or 000");
 
-   pulseSensor.analogInput(PulseWire);   
-  pulseSensor.blinkOnPulse(LED13);       //auto-magically blink Arduino's LED with heartbeat.
+   if(!accel.begin())
+   {
+      Serial.println("No ADXL345 sensor detected.");
+      while(1);
+   }
+   else
+   {
+      Serial.println("ADXL345 sensor detected.");
+   }
+
+  pulseSensor.analogInput(PulseWire);   
+  //pulseSensor.blinkOnPulse(LED13);       //auto-magically blink Arduino's LED with heartbeat.
   pulseSensor.setThreshold(Threshold);   
 
 
@@ -41,6 +62,18 @@ void setup()
   int default_bpm = 80;
   String bpm = "80";
 
+
+  int x_old=0 , y_old=0 , z_old=0;
+  int x_new=0 , y_new =0 , z_new=0;
+
+  bool call = false ; 
+  bool first_time = true;
+
+  int bz_cntr = 20;
+
+  bool alarm = false;
+  
+
 void loop() 
 { 
   if (MyBlue.available()) {
@@ -48,6 +81,34 @@ void loop()
   }
 
   bpm = "80";
+
+
+
+   sensors_event_t event; 
+   accel.getEvent(&event);
+
+   x_new = event.acceleration.x;
+   y_new = event.acceleration.y;
+   z_new = event.acceleration.z;
+
+  if(first_time)
+  {
+  
+   
+   x_old = x_new;
+   y_old = y_new;
+   z_old = z_new;
+   
+  }
+      
+
+
+   
+
+   Serial.print("X: "); Serial.print(event.acceleration.x); Serial.print("  ");
+   Serial.print("Y: "); Serial.print(event.acceleration.y); Serial.print("  ");
+   Serial.print("Z: "); Serial.print(event.acceleration.z); Serial.print("  ");
+   Serial.println("m/s^2 ");
 
 
   int myBPM = pulseSensor.getBeatsPerMinute();  
@@ -69,12 +130,60 @@ void loop()
 
         Serial.println(bpm);
         
-        MyBlue.print(bpm);      
+            
     }
 
 
     Serial.println("-------------------------------------------");
 
-    delay(200);
+
+      if( abs(x_new - x_old) > 7  || abs(y_new - y_old) > 7 || abs(z_new - z_old) > 7 )
+      {
+          call = true;
+      }
+
+
+     if(call)
+     {
+        
+        MyBlue.print("aaaaaaa");
+       
+        alarm = true;
+        digitalWrite(buzzer , HIGH);
+       
+        call = false;
+        
+     }
+     else{
+
+        MyBlue.print(bpm); 
+     }
+
+     
+ 
+     
+    delay(300);
+
+    x_old = x_new;
+    y_old = y_new;
+    z_old = z_new;
+    
+    first_time = false;
+
+
+    if(alarm && bz_cntr > 0)
+    {
+        bz_cntr--;
+    }
+
+    if(bz_cntr == 0)
+    {
+      alarm = false;
+      digitalWrite(buzzer , LOW);
+      bz_cntr = 20;
+    }
+    
+
+    
 
 } 

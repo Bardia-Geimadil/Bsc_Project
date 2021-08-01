@@ -67,6 +67,7 @@ public class FaultdetectedActivity extends AppCompatActivity implements View.OnC
                             Intent callIntent = new Intent(Intent.ACTION_CALL);
                             callIntent.setData(Uri.parse("tel:" + number));//change the number
                             startActivity(callIntent);
+                            finish();
 
                         }
 

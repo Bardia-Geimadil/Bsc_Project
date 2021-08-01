@@ -36,7 +36,7 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
 
     ImageView heartImage;
     TextView beatRate_tv , heartRateCon_tv;
-    Button fault_btn;
+
 
     public final static int REQ_BT_ENABLE = 1212 ;
     public final static int PHONE_CALL_PER = 1313 ;
@@ -86,13 +86,6 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
 
 
 
-         fault_btn = findViewById(R.id.fault_btn);
-         fault_btn.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 startActivity(new Intent(work_activity.this , FaultdetectedActivity.class));
-             }
-         });
 
 
 
@@ -124,51 +117,6 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    public void communicate(){
-
-
-        try {
-            OutputStream outputStream = btSocket.getOutputStream();
-            outputStream.write(49);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-        while (!faultDetected){
-
-            time_to_show++;
-
-            if(time_to_show == 60)
-                time_to_show=0;
-
-            InputStream inputStream = null;
-            try {
-                inputStream = btSocket.getInputStream();
-                inputStream.skip(inputStream.available());
-                // Toast.makeText(this , "Receiving Data ....." , Toast.LENGTH_LONG).show();
-                for (int i = 0; i < 3; i++) {
-
-                    byte b = (byte) inputStream.read();
-                    System.out.println((char) b);
-                    sb.append((char) b);
-//                Toast.makeText(MainActivity.this , b , Toast.LENGTH_SHORT).show();
-
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            //beatRate_tv.setText(sb.toString());
-
-            if(sb.toString().equals("alaki"))
-                faultDetected=true;
-
-        }
-
-    }
 
     public void connectBluetooth() {
 
@@ -195,15 +143,7 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    @Override
-    public void onClick(View view) {
 
-        if(view.getId() == heartImage.getId()) {
-
-            new communicateAsyncTask().executeOnExecutor(communicateAsyncTask.THREAD_POOL_EXECUTOR);
-        }
-
-    }
 
     class communicateAsyncTask extends AsyncTask<String , String , String>
     {
@@ -243,8 +183,15 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
 
                 //beatRate_tv.setText(sb.toString());
 
-                if(sb.toString().contains("Bardia")) {
+                if(sb.toString().contains("a")) {
                     faultDetected = true;
+
+                    try {
+                        btSocket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     startActivity(new Intent(work_activity.this , FaultdetectedActivity.class));
                 }
 
@@ -299,6 +246,23 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
 
 
 
+    @Override
+    public void onClick(View view) {
+
+        if(view.getId() == heartImage.getId()) {
+
+            if(btSocket.isConnected()) {
+
+                Toast.makeText(work_activity.this , "Starting the communication..." , Toast.LENGTH_LONG).show();
+                new communicateAsyncTask().executeOnExecutor(communicateAsyncTask.THREAD_POOL_EXECUTOR);
+            }
+            else
+            {
+                Toast.makeText(work_activity.this , "Your device is not connected" , Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
