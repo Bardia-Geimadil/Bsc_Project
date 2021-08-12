@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <ImageView
+        android:id="@+id/imageview"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/alarm1"
+        android:padding="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        />
+
+
+
+    <TextClock
+        android:id="@+id/main_text_clock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="18:20"
+        android:textSize="90sp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="140dp"
+        android:textColor="#009688"
+        android:visibility="invisible"
+        />
+
+    <TextView
+        android:id="@+id/medicinename_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Medicine"
+        android:textSize="50sp"
+        android:textColor="#2FFF00"
+        android:layout_marginTop="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/dis_btn"
+        android:layout_marginBottom="30dp"
+        android:visibility="invisible"
+        />
+
+    <Button
+        android:id="@+id/dis_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dismiss Alarm"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="150dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"
+        android:textAllCaps="false"
+        android:visibility="invisible"
+        />
+
+    <Button
+        android:id="@+id/addDrug"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:text="+"
+        android:textSize="70sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/add_bcg"
+        />
+
+
+
+
+
+
+</RelativeLayout>
