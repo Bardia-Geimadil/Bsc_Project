@@ -42,7 +42,10 @@ public class addDrugActivity extends AppCompatActivity {
 
                 Medicine.medicineList.add(medicine);
 
-                Toast.makeText(addDrugActivity.this , "Medicine Added " + Medicine.medicineList.size() , Toast.LENGTH_SHORT).show();
+                Toast.makeText(addDrugActivity.this , "Medicine Added", Toast.LENGTH_SHORT).show();
+
+                Utils.createFileContent(getApplicationContext());
+
                 finish();
             }
         });

@@ -18,7 +18,7 @@
         />
 
 
-
+<!--
     <TextClock
         android:id="@+id/main_text_clock"
         android:layout_width="match_parent"
@@ -58,6 +58,7 @@
         android:textAllCaps="false"
         android:visibility="invisible"
         />
+    -->
 
     <Button
         android:id="@+id/addDrug"

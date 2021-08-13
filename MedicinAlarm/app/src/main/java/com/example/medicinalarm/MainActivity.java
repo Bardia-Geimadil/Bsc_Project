@@ -27,15 +27,8 @@ import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity{
 
-    Ringtone ringtone;
-    TextClock textClock;
-    Button dis_btn;
-    TextView medicinenameAlarm;
     ImageView img;
     Button addDrug;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +36,12 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
 
-        textClock = findViewById(R.id.main_text_clock);
-        medicinenameAlarm = findViewById(R.id.medicinename_alarm);
-        dis_btn = findViewById(R.id.dis_btn);
         addDrug = findViewById(R.id.addDrug);
         img = findViewById(R.id.imageview);
 
 
+        Utils.fillItems(this);
 
-        ringtone = RingtoneManager.getRingtone(getApplicationContext() ,
-                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE));
 
 
         addDrug.setOnClickListener(new View.OnClickListener() {
@@ -64,27 +53,13 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        dis_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ringtone.stop();
-                textClock.setVisibility(View.INVISIBLE);
-                medicinenameAlarm.setVisibility(View.INVISIBLE);
-                dis_btn.setVisibility(View.INVISIBLE);
-                img.setVisibility(View.VISIBLE);
-                addDrug.setVisibility(View.VISIBLE);
-
-            }
-        });
-
-        Handler handler = new Handler();
-
-
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+
+                System.out.println("In timerrrrrrrrr");
 
 
                 if(Medicine.medicineList.size() > 0)
@@ -104,26 +79,16 @@ public class MainActivity extends AppCompatActivity{
                         {
                             String name = Medicine.medicineList.get(i).name;
 
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ringtone.play();
-                                    textClock.setVisibility(View.VISIBLE);
-                                    medicinenameAlarm.setVisibility(View.VISIBLE);
-                                    medicinenameAlarm.setText(name);
-                                    dis_btn.setVisibility(View.VISIBLE);
-                                    img.setVisibility(View.INVISIBLE);
-                                    addDrug.setVisibility(View.INVISIBLE);
-                                }
-                            });
+                            Intent intent = new Intent(MainActivity.this , ShowAlarmActivity.class);
+                            intent.putExtra("name" , Medicine.medicineList.get(i).name);
 
-
+                            startActivity(intent);
                         }
                     }
                 }
 
             }
-        }  , 0 , 35000);
+        }  , 0 , 55000);
 
 
     }
