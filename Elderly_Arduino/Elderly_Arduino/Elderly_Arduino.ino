@@ -25,12 +25,14 @@ SoftwareSerial MyBlue(2, 3); // RX | TX
 byte flag = 0; 
 
 int buzzer = 8;
+int button = 7;
 
 
 void setup() 
 {   
 
   pinMode(buzzer , OUTPUT);
+  pinMode (button , INPUT);
     
   Serial.begin(9600); 
   MyBlue.begin(9600); 
@@ -128,7 +130,7 @@ void loop()
         }
         
 
-        Serial.println(bpm);
+        //Serial.println(bpm);
         
             
     }
@@ -137,9 +139,25 @@ void loop()
     Serial.println("-------------------------------------------");
 
 
-      if( abs(x_new - x_old) > 7  || abs(y_new - y_old) > 7 || abs(z_new - z_old) > 7 )
+      if( abs(x_new - x_old) > 7  || abs(y_new - y_old) > 7 || abs(z_new - z_old) > 7 ) // Checking for fall detection
       {
+          Serial.println("fall detected");
           call = true;
+      }
+
+
+      if(myBPM > 1 && myBPM < 40) // checking for heartBeat problems
+      { 
+        Serial.println("heart problem detected");
+        call = true;
+      }
+
+      if(digitalRead(button) == HIGH) // cheking for manual alarm
+      {
+
+        Serial.println("manual alert detected");
+        
+        call = true;
       }
 
 
