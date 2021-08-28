@@ -25,14 +25,16 @@ SoftwareSerial MyBlue(2, 3); // RX | TX
 byte flag = 0; 
 
 int buzzer = 8;
-int button = 7;
+int button = 11;
+
+int fall_threshold = 7;
 
 
 void setup() 
 {   
 
   pinMode(buzzer , OUTPUT);
-  pinMode (button , INPUT);
+  pinMode (button , INPUT_PULLUP);
     
   Serial.begin(9600); 
   MyBlue.begin(9600); 
@@ -78,9 +80,14 @@ void setup()
 
 void loop() 
 { 
-  if (MyBlue.available()) {
-    flag = MyBlue.read(); 
+  if (MyBlue.available() > 0 ) {
+    fall_threshold = MyBlue.read(); 
+    Serial.print("The Falling threshold is ........... "); 
+    Serial.print(fall_threshold); 
   }
+
+
+
 
   bpm = "80";
 
@@ -107,19 +114,20 @@ void loop()
 
    
 
-   Serial.print("X: "); Serial.print(event.acceleration.x); Serial.print("  ");
-   Serial.print("Y: "); Serial.print(event.acceleration.y); Serial.print("  ");
-   Serial.print("Z: "); Serial.print(event.acceleration.z); Serial.print("  ");
-   Serial.println("m/s^2 ");
+//   Serial.print("X: "); Serial.print(event.acceleration.x); Serial.print("  ");
+//   Serial.print("Y: "); Serial.print(event.acceleration.y); Serial.print("  ");
+//   Serial.print("Z: "); Serial.print(event.acceleration.z); Serial.print("  ");
+//   Serial.println("m/s^2 ");
 
 
   int myBPM = pulseSensor.getBeatsPerMinute();  
    
 
     if (pulseSensor.sawStartOfBeat()) {            // Constantly test to see if "a beat happened". 
-       // Serial.println("♥  A HeartBeat Happened ! "); // If test is "true", print a message "a heartbeat happened".
-       // Serial.print("BPM: ");                        // Print phrase "BPM: " 
-        //Serial.println(myBPM);                        // Print the value inside of myBPM.   
+//        Serial.println("♥  A HeartBeat Happened ! "); // If test is "true", print a message "a heartbeat happened".
+//        Serial.print("BPM: ");                        // Print phrase "BPM: " 
+//        Serial.println(myBPM);                        // Print the value inside of myBPM.   
+        
         if(myBPM<100)
         {
           bpm = "0"  + String(myBPM);
@@ -130,7 +138,7 @@ void loop()
         }
         
 
-        //Serial.println(bpm);
+       // Serial.println(bpm);
         
             
     }
@@ -139,7 +147,7 @@ void loop()
     Serial.println("-------------------------------------------");
 
 
-      if( abs(x_new - x_old) > 7  || abs(y_new - y_old) > 7 || abs(z_new - z_old) > 7 ) // Checking for fall detection
+      if( abs(x_new - x_old) > fall_threshold  || abs(y_new - y_old) > fall_threshold || abs(z_new - z_old) > fall_threshold ) // Checking for fall detection
       {
           Serial.println("fall detected");
           call = true;
@@ -152,7 +160,7 @@ void loop()
         call = true;
       }
 
-      if(digitalRead(button) == HIGH) // cheking for manual alarm
+      if(digitalRead(button) == LOW) // cheking for manual alarm
       {
 
         Serial.println("manual alert detected");
