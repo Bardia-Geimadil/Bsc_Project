@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Elderly Care</string>
+
+
+    <array name="sensList">
+
+
+        <item>Low</item>
+        <item>Normal</item>
+        <item>High</item>
+
+
+
+    </array>
+
+
+
 </resources>

@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,11 +13,14 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,7 +46,7 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
     public final static int PHONE_CALL_PER = 1313 ;
 
 
-
+    ///////////////////////////Bluetooth///////////////////////////////////
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     BluetoothDevice hc05;
@@ -60,12 +64,17 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
     int time_to_show;
 
 
+    SharedPreferences preferences;
+    int sensitivity_to_send = 7;
+    String sensitivity = "Normal";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_activity);
+
+
 
 
          heartImage = findViewById(R.id.heartImage);
@@ -76,7 +85,9 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
 
          bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-         hc05 = bluetoothAdapter.getRemoteDevice("78:D8:5D:10:1D:0C"); // this is the unique mac of my hc_0c
+         hc05 = bluetoothAdapter.getRemoteDevice("78:D8:5D:10:1D:0C"); // this is the unique mac of my hc_05
+
+
 
 
          heartImage.setOnClickListener(this);
@@ -99,6 +110,22 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
 
 
 
+
+    }
+
+    public void get_sensitivity()
+    {
+        preferences= PreferenceManager.getDefaultSharedPreferences(this);
+        sensitivity = preferences.getString("senseList" , "Normal");
+        if(sensitivity.equals("Low")) {
+            sensitivity_to_send = 9;
+        }
+        else if (sensitivity.equals("Normal")) {
+            sensitivity_to_send = 7;
+        }
+        else if (sensitivity.equals("High")) {
+            sensitivity_to_send = 5;
+        }
 
     }
 
@@ -152,9 +179,12 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
         protected String doInBackground(String... objects) {
 
 
+            get_sensitivity();
+
+
             try {
                 OutputStream outputStream = btSocket.getOutputStream();
-                outputStream.write(49);
+                outputStream.write(sensitivity_to_send);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -216,6 +246,16 @@ public class work_activity extends AppCompatActivity implements View.OnClickList
             System.out.println("We are hereeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 
                  beatRate_tv.setText(values[0] + " BPM");
+
+                 if(Integer.parseInt(values[0]) > 120 || Integer.parseInt(values[0]) < 60) {
+                     heartRateCon_tv.setTextColor(ContextCompat.getColor(work_activity.this, R.color.red));
+                     heartRateCon_tv.setText("Dangerous");
+                 }
+                 if(Integer.parseInt(values[0]) < 120 && Integer.parseInt(values[0]) > 60) {
+                     heartRateCon_tv.setTextColor(ContextCompat.getColor(work_activity.this, R.color.purple_500));
+                     heartRateCon_tv.setText("Healthy");
+                 }
+
 
 
         }

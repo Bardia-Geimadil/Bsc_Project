@@ -16,5 +16,14 @@
         android:summary="Set the time of automatic calling delay (in seconds)"
         />
 
+    <ListPreference
+        android:title="Falling Sensitivity"
+        android:summary="Set fall detection sensitivity"
+        android:key="senseList"
+        android:entries="@array/sensList"
+        android:entryValues="@array/sensList"
+        android:defaultValue="Normal"
+        />
+
 </PreferenceCategory>
 </PreferenceScreen>
