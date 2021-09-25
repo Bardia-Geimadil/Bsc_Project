@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity{
     ImageView img;
     Button addDrug;
 
+    Thread thread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,44 +56,51 @@ public class MainActivity extends AppCompatActivity{
         });
 
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
 
-                System.out.println("In timerrrrrrrrr");
+                Timer timer = new Timer();
+                //timer.cancel();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+
+                        System.out.println("In timerrrrrrrrr");
+
+                        Utils.print_medicine();
 
 
-                if(Medicine.medicineList.size() > 0)
-                {
-
-                    for (int i=0 ; i< Medicine.medicineList.size() ; i++)
-                    {
-
-                       int medicine_hour = Medicine.medicineList.get(i).hour ;
-                       int medicine_min = Medicine.medicineList.get(i).min;
-
-                       if(medicine_hour > 12)
-                           medicine_hour -= 12;
-
-                        if(medicine_hour == Calendar.getInstance().get(Calendar.HOUR) &&
-                                medicine_min == Calendar.getInstance().get(Calendar.MINUTE))
+                        if(Medicine.medicineList.size() > 0)
                         {
-                            String name = Medicine.medicineList.get(i).name;
 
-                            Intent intent = new Intent(MainActivity.this , ShowAlarmActivity.class);
-                            intent.putExtra("name" , Medicine.medicineList.get(i).name);
+                            for (int i=0 ; i< Medicine.medicineList.size() ; i++)
+                            {
 
-                            startActivity(intent);
+                                int medicine_hour = Medicine.medicineList.get(i).hour ;
+                                int medicine_min = Medicine.medicineList.get(i).min;
+
+                                if(medicine_hour > 12)
+                                    medicine_hour -= 12;
+
+                                if(medicine_hour == Calendar.getInstance().get(Calendar.HOUR) &&
+                                        medicine_min == Calendar.getInstance().get(Calendar.MINUTE))
+                                {
+                                    System.out.println("found a similarity");
+
+                                    Intent intent = new Intent(MainActivity.this , ShowAlarmActivity.class);
+                                    intent.putExtra("name" , Medicine.medicineList.get(i).name);
+
+                                    startActivity(intent);
+                                }
+                            }
                         }
+
                     }
-                }
+                }  , 1000 , 55000);
 
             }
-        }  , 0 , 55000);
 
 
-    }
+
+
 
 
     @Override

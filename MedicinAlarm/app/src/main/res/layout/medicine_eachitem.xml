@@ -22,9 +22,19 @@
         android:layout_height="wrap_content"
         android:text="18:02"
         android:textSize="40sp"
-        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="80dp"
         android:layout_alignParentRight="true"
         android:textColor="#11FF00"
+        />
+
+    <ImageView
+        android:id="@+id/trash_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/trash"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10sp"
         />
 
 

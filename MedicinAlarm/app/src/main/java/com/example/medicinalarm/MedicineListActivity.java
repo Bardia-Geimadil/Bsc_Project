@@ -22,6 +22,8 @@ public class MedicineListActivity extends AppCompatActivity {
 
         medicineListView = findViewById(R.id.medicine_listview);
 
+        System.out.println("The size of medicineeeeeeeeeeeeeeeeeee "+ Medicine.medicineList.size());
+
         medicineAdapter = new MedicineAdapter(this , Medicine.medicineList);
 
         medicineListView.setAdapter(medicineAdapter);

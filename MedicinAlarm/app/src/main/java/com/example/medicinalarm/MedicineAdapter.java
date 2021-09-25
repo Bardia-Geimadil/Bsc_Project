@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,18 +58,31 @@ public class MedicineAdapter extends ArrayAdapter {
     public class ViewHolder{
 
         TextView name , time;
+        ImageView trash;
 
         public ViewHolder(View v)
         {
             name = v.findViewById(R.id.eachName);
             time = v.findViewById(R.id.eachTime);
-
+            trash = v.findViewById(R.id.trash_icon);
         }
 
         public  void  fill(final int position){
 
             name.setText(items.get(position).name);
             time.setText(items.get(position).hour+":"+items.get(position).min);
+
+            trash.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Medicine.medicineList.remove(position);
+
+                    notifyDataSetChanged();
+
+                    Utils.createFileContent(getContext());
+
+                }
+            });
 
         }
 

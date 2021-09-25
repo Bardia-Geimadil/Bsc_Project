@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,21 +13,24 @@
         android:layout_height="wrap_content"
         android:textSize="90sp"
         android:text="18:02"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
         android:textColor="#009688"
         />
+
     <TextView
         android:id="@+id/medicinename_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Medicine"
-        android:textSize="60sp"
+        android:layout_above="@id/okDialog"
+        android:layout_below="@id/textClock"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:text="aspirin"
         android:textColor="#2FFF00"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
-
-        />
+        android:textSize="60sp" />
     <Button
         android:id="@+id/okDialog"
         android:layout_width="wrap_content"
@@ -35,8 +38,9 @@
         android:text="Dismiss"
         android:backgroundTint="#59FF00"
         android:textSize="30sp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp"
+        android:layout_alignParentBottom="true"
         />
 
-</LinearLayout>
+</RelativeLayout>

@@ -36,6 +36,8 @@ public class addDrugActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
+
                 Medicine medicine = new Medicine(medicineNameEditText.getText().toString()
                         , timePicker.getHour(), timePicker.getMinute());
 

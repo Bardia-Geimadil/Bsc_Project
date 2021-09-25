@@ -7,6 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLOutput;
+
+import javax.xml.transform.Source;
 
 public class Utils {
 
@@ -16,8 +19,6 @@ public class Utils {
 
     public static void createFileContent(Context context)
     {
-
-
 
         StringBuilder sb = new StringBuilder();
 
@@ -29,8 +30,6 @@ public class Utils {
         }
 
         file_content = sb.toString();
-
-
 
         writeFile(context);
 
@@ -44,23 +43,60 @@ public class Utils {
 
         String [] result = file_content.split("\n");
 
+
+//       System.out.println("Result content is ...............");
+//
+//        for (int i=0;i<result.length ; i++)
+//        {
+//            System.out.println(result[i] +"\n");
+//        }
+
+       Medicine.medicineList.clear();
+
+  //      System.out.println(result.length);
+
         for(int i=0 ; i<=result.length-3 ; i+=3)
         {
             Medicine currentMedicine = new Medicine();
 
             currentMedicine.name = result[i];
             currentMedicine.hour = Integer.parseInt(result[i+1]);
-            currentMedicine.min = Integer.parseInt(result[i+1]);
+            currentMedicine.min = Integer.parseInt(result[i+2]);
             Medicine.medicineList.add(currentMedicine);
         }
+//        int i =0;
+//
+//
+//
+//
+//        while (i<result.length-1 )
+//        {
+//
+//            Medicine currentMedicine = new Medicine();
+//            currentMedicine.name = result[i];
+//            currentMedicine.hour = Integer.parseInt(result[i+1]);
+//            currentMedicine.min = Integer.parseInt(result[i+2]);
+//            Medicine.medicineList.add(currentMedicine);
+//            i +=3;
+//            System.out.println("I was in whileeee");
+//        }
+//
+//        System.out.println("Now the items are filled");
+//        for (int j=0 ; j< Medicine.medicineList.size() ; j++)
+//        {
+//            System.out.println(Medicine.medicineList.get(j).name +"\n"+Medicine.medicineList.get(j).hour+"\n" + Medicine.medicineList.get(j).min+"\n");
+//        }
     }
 
     public static void writeFile(Context context )
     {
+
+
+        context.deleteFile("medicineFile.txt" );
+
         try {
 
             FileOutputStream fileOutputStream = context.openFileOutput( "medicineFile.txt" , Context.MODE_PRIVATE);
-
             fileOutputStream.write(file_content.getBytes());
             fileOutputStream.close();
 
@@ -95,7 +131,7 @@ public class Utils {
 
             file_content = stringBuffer.toString();
 
-
+            //System.out.println(file_content);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -104,7 +140,22 @@ public class Utils {
         }
 
 
+
     }
+
+
+
+    public static void print_medicine()
+    {
+
+
+        for (int j=0 ; j< Medicine.medicineList.size() ; j++)
+        {
+            System.out.println(Medicine.medicineList.get(j).name +"\n"+Medicine.medicineList.get(j).hour+"\n" + Medicine.medicineList.get(j).min+"\n");
+        }
+
+    }
+
 
 
 }
